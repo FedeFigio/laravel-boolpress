@@ -71,12 +71,9 @@
                 </div>
             </div>
         </nav>
-        <div class="d-flex">
-            @include('layouts.partials.sidebar')
             <main class="py-4 w-100 ">
                 @yield('content')
             </main>
-        </div>
     </div>
 </body>
 </html>
