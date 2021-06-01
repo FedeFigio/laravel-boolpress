@@ -10,11 +10,12 @@
         <div class="row justify-content-center">
             <div class="col-md-3">
                 <div class="card-header">{{ $post->title }}</div>
+                <img src="{{asset($post->cover)}}" alt="">
                 <div class="card-body">
                     <h4>
                         CATEGORY:
                         @if ($post->category)
-                           {{ $post->category->name }}
+                            {{ $post->category->name }}
                         @endif
                     </h4>
                 </div>

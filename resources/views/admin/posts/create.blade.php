@@ -9,7 +9,7 @@
         </div>
         <div class="row justify-content-center">
             <div class="col-md-8">
-                <form action="{{ route('admin.posts.store') }}" method="POST">
+                <form action="{{ route('admin.posts.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('POST')
                     <div class="form-group">
@@ -21,14 +21,14 @@
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        @error('category')
+                        @error('category_id')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="title">Title</label>
                         <input class="form-control @error('title') is-invalid
-                                                @enderror" id="title" type="text" name="title"
+                                                            @enderror" id="title" type="text" name="title"
                             value="{{ old('title') }}">
                         @error('title')
                             <small class="text-danger">{{ $message }}</small>
@@ -37,10 +37,17 @@
                     <div class="form-group">
                         <label for="content">Content</label>
                         <textarea class="form-control @error('content') is-invalid
-
-                                                @enderror" class="form-control" id="content"
+                                                            @enderror" id="content"
                             name="content">{{ old('content') }}</textarea>
                         @error('content')
+                            <small class="text-danger">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <label for="cover">Cover</label>
+                        <input type="file" name="cover" @error('cover') is-invalid @enderror" class="form-control-file"
+                            id="cover">
+                        @error('cover')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>

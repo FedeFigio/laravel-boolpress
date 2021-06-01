@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\Mail\NewPostMail;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PostController extends Controller
@@ -40,17 +43,29 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'category_id' => 'exists:categories,id|nullable'
+            'category_id' => 'exists:categories,id|nullable',
+            'cover' => 'mimes:jpeg,jpg,bmp,png|max:6000|nullable',
         ]);
         $data = $request->all();
-        $post = new Post();
 
-        $post->fill($data);
-        $post->slug = $this->generateSlug($post->title);
-        $post->save();
+        try {
+            $cover = Storage::put('uploads', $data['cover']);
+
+            $post = new Post();
+            $post->fill($data);
+            $post->slug = $this->generateSlug($post->title);
+            $post->cover = 'storage/' . $cover;
+            $post->save();
+
+            Mail::send(new NewPostMail($post));
+
+        } catch (\Throwable $th) {
+            dd($th->getMessage());
+        }
         return redirect()->route('admin.posts.index');
     }
 

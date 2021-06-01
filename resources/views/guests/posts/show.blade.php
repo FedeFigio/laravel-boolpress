@@ -75,7 +75,6 @@
                     <a href="{{ route('admin.index') }}">Home</a>
                 @else
                     <a href="{{ route('login') }}">Login</a>
-
                     @if (Route::has('register'))
                         <a href="{{ route('register') }}">Register</a>
                     @endif
@@ -101,15 +100,6 @@
                         </div>
                         <div class="card-body">
                             {{ $post->content }}
-                        </div>
-                        <div class="d-flex">
-                            <a class="btn btn-primary"
-                                href="{{ route('admin.posts.edit', ['post' => $post->id]) }}">Modifica</a>
-                            <form action="{{ route('admin.posts.destroy', $post->id) }}" method="POST">
-                                @csrf
-                                @method('DELETE')
-                                <button class="btn btn-primary">DELETE</button>
-                            </form>
                         </div>
                     </div>
                 </div>
