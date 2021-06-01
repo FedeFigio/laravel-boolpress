@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin.app')
 
 @section('content')
     <div class="container">
@@ -11,7 +11,12 @@
             <div class="col-md-3">
                 <div class="card-header">{{ $post->title }}</div>
                 <div class="card-body">
-                    CATEGORY: {{ $post->category->name }}
+                    <h4>
+                        CATEGORY:
+                        @if ($post->category)
+                           {{ $post->category->name }}
+                        @endif
+                    </h4>
                 </div>
                 <div class="card-body">
                     {{ $post->content }}
@@ -24,7 +29,6 @@
                         <button class="btn btn-primary">DELETE</button>
                     </form>
                 </div>
-
             </div>
         </div>
     </div>

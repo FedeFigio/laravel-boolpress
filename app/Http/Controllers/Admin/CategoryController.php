@@ -58,7 +58,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('admin.categories.show', compact('category'));
     }
 
     /**
@@ -76,7 +76,7 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Category $category
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Category $category)
@@ -96,12 +96,13 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Category $category
      * @return \Illuminate\Http\Response
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->route('admin.categories.index');
     }
 
 

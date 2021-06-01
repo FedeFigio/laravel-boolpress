@@ -86,7 +86,6 @@
 
                 <div class="links">
                     <a href="{{route('posts.index')}}">Posts</a>
-
                 </div>
             </div>
         </div>

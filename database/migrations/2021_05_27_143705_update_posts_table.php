@@ -17,7 +17,8 @@ class UpdatePostsTable extends Migration
             $table->unsignedBigInteger('category_id')->after('slug')->nullable();
             $table->foreign('category_id')
             ->references('id')
-            ->on('categories');
+            ->on('categories')
+            ->onDelete('set null');
         });
     }
 
