@@ -22,6 +22,7 @@ Route::get('/', 'HomeController@index')->name('index');
 Route::get('posts/{slug}', 'PostController@show')->name('posts.show');
 Route::get('posts', 'PostController@index')->name('posts.index');
 Route::get('categories/{slug}','CategoryController@index')->name('category.index');
+Route::get('tags/{slug}','TagController@index')->name('tag.index');
 
 Auth::routes();
 
@@ -31,4 +32,5 @@ Route::middleware('auth')->namespace('Admin')->prefix('admin')->name('admin.')
         Route::get('/', 'HomeController@index')->name('index');
         Route::resource('posts', 'PostController');
         Route::resource('categories', 'CategoryController');
+        Route::resource('tags', 'TagController');
     });

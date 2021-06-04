@@ -104,8 +104,16 @@
                     </div>
                 </div>
             </div>
+            <div>
+                @foreach ($post->tags as $tag)
+                    <a href="{{ route('tag.index', ['slug' => $tag->slug]) }}">#{{ $tag->name }}</a>
+                @endforeach
+            </div>
         </div>
     </div>
+
+
+
 </body>
 
 </html>

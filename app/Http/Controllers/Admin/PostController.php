@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Mail\NewPostMail;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
@@ -31,8 +32,9 @@ class PostController extends Controller
      */
     public function create()
     {
+        $tags = Tag::all();
         $categories = Category::all();
-        return view('admin.posts.create', compact('categories'));
+        return view('admin.posts.create', compact('categories', 'tags'));
     }
 
     /**
@@ -43,12 +45,12 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category_id' => 'exists:categories,id|nullable',
             'cover' => 'mimes:jpeg,jpg,bmp,png|max:6000|nullable',
+            'tag_ids.*' => 'exists:tags,id',
         ]);
         $data = $request->all();
 
@@ -61,8 +63,11 @@ class PostController extends Controller
             $post->cover = 'storage/' . $cover;
             $post->save();
 
-            Mail::send(new NewPostMail($post));
+            if (array_key_exists('tag_ids', $data)) {
+                $post->tags()->attach($data['tag_ids']);
+            }
 
+            Mail::send(new NewPostMail($post));
         } catch (\Throwable $th) {
             dd($th->getMessage());
         }
@@ -89,7 +94,8 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('admin.posts.edit', compact('post', 'categories'));
+        $tags = Tag::all();
+        return view('admin.posts.edit', compact('post', 'categories', 'tags'));
     }
 
     /**
@@ -104,14 +110,20 @@ class PostController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'category_id' => 'exists:categories,id|nullable'
-
+            'category_id' => 'exists:categories,id|nullable',
+            'tag_ids.*' => 'exists:tags,id',
         ]);
         $data = $request->all();
 
         $data['slug'] = $this->generateSlug($data['title'], $post->title != $data['title'], $post->slug);
 
         $post->update($data);
+
+        if (array_key_exists('tag_ids', $data)) {
+            $post->tags()->sinc($data['tag_ids']);
+        } else {
+            $post->tags()->detach();
+        }
 
         return redirect()->route('admin.posts.index');
     }
